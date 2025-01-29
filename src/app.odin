@@ -43,7 +43,7 @@ init :: proc(rom_path: string) {
 	run = true
 
 	ok: bool
-	rom, ok = _read_entire_file(rom_path)
+	rom, ok = read_entire_file(rom_path)
 	if !ok {
 		log.errorf("Failed to load the file at %s", rom_path)
 		os.exit(1)
