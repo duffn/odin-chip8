@@ -1,0 +1,57 @@
+name: pages
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-web:
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 30
+
+    environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: laytan/setup-odin@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: dev-2025-01
+
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.74
+          actions-cache-folder: emsdk-cache
+
+      - name: Build
+        run: make build-web
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
