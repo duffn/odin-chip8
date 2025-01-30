@@ -32,7 +32,7 @@ run-desktop:
 	@mkdir -p $(OUT_DIR_DESKTOP)
 	odin run $(SRC_DESKTOP) -debug -out:$(OUT_DIR_DESKTOP)/$(DEBUG_BINARY) $(ODIN_FLAGS) -- ../../roms/tests/1-chip8-logo.ch8
 
-build-web: $(OUT_APP_WEB) copy-odin-js link-web
+build-web: $(OUT_APP_WEB) copy-files link-web
 
 $(OUT_APP_WEB):
 	@mkdir -p $(OUT_DIR_WEB)
@@ -41,8 +41,9 @@ $(OUT_APP_WEB):
 		-define:RAYGUI_WASM_LIB=$(RAYLIB_WASM_LIB) \
 		-vet -strict-style -out:$(OUT_APP_WEB)
 
-copy-odin-js:
+copy-files:
 	cp $(ODIN_JS_PATH) $(OUT_DIR_WEB)/
+	cp images/spaceinvaders.png $(OUT_DIR_WEB)/
 
 link-web:
 	emcc -o $(OUT_DIR_WEB)/index.html $(FILES_WEB) $(EMCC_FLAGS)
@@ -51,4 +52,4 @@ link-web:
 clean:
 	rm -rf $(OUT_DIR)
 
-.PHONY: all build-desktop run-desktop build-web copy-odin-js link-web clean
+.PHONY: all build-desktop run-desktop build-web copy-files link-web clean
