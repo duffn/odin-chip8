@@ -15,7 +15,7 @@ _ :: fmt
 LOG_LEVEL :: log.Level.Debug when ODIN_DEBUG else log.Level.Info
 
 Options :: struct {
-	rom: string `args:"pos=0" usage:"The ROM file."`,
+	rom: string `args:"required,pos=0" usage:"The ROM file."`,
 }
 
 parse_and_validate_options :: proc(args: []string) -> Options {
